@@ -2,7 +2,24 @@
 body,
 #root {
   margin: 0;
+  height: 100vh;
+  overflow: hidden;
   font-family: 'Noto Sans KR', sans-serif;
+  background: linear-gradient(135deg, #2e004f, #5b0080);
+  animation: backgroundFlow 20s ease-in-out infinite;
+}
+
+/* 배경 그라데이션 애니메이션 */
+@keyframes backgroundFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* 전체 배경 */
@@ -10,55 +27,130 @@ body,
 .app-background {
   width: 100vw;
   height: 100vh;
-  background-image: url('./img/backgroundimg.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(circle at center, rgba(255 182 193 / 0.15), transparent 70%),
+    url('./img/backgroundimg.png');
+  background-size: cover, 150% 150%;
+  background-position: center center, center center;
+  background-repeat: no-repeat, no-repeat;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 50px;
+  padding-left: 0px;
   box-sizing: border-box;
-  position: relative; 
+  position: relative;
   overflow: hidden;
-  animation: bgGlow 10s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 10px #da70d6);
 }
 
-/* 배경 전체에 빛나는 애니메이션 */
-@keyframes bgGlow {
-  0% {
-    filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
-  }
-  100% {
-    filter: brightness(1.1) drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
-  }
+/* 수정구슬+글씨를 감싸는 컨테이너 (위치 고정용) */
+.orb-container {
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 수정구슬과 글씨를 함께 위아래로 움직이는 컨테이너 */
+.orb-move {
+  animation: orbFloat 4s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 수정구슬 멘트 오버레이 */
 .magic-orb-overlay-message {
   position: absolute;
-  top: 60%;  
+  top: 60%;
   left: 60%;
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 20;
   pointer-events: none;
-  font-size: 18px;
-  color: #f5f5ff;
-  text-shadow: 0 0 8px #c4b5fd, 0 0 16px #a78bfa;
-  animation: fadeInUp 1.5s ease-in-out;
+  color: #f3e8ff;
+  font-weight: 600;
+  font-size: 24px;
+  text-shadow:
+    0 0 5px #e0b0ff,
+    0 0 10px #e0b0ff,
+    0 0 20px #b980ff;
+  animation: orbGlowPulse 3s ease-in-out infinite;
 }
 
-/* 멘트 천천히 나타나는 효과 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -40%);
+/* 수정구슬 빛나는 펄스 애니메이션 */
+@keyframes orbGlowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #e0b0ff,
+      0 0 10px #e0b0ff,
+      0 0 20px #b980ff;
   }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
+  50% {
+    text-shadow:
+      0 0 15px #ffccff,
+      0 0 30px #ff99ff,
+      0 0 40px #ff66ff;
   }
+}
+
+/* 수정구슬 본체 스타일 및 펄스 애니메이션 */
+.crystal-canvas {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #d49aff 40%, #6b2ecf 80%);
+  box-shadow: 0 0 15px #c880ff, 0 0 30px #b04bff, 0 0 40px #a020f0;
+  filter: drop-shadow(0 0 10px #bb77ff);
+  animation: orbPulseScale 4s ease-in-out infinite;
+}
+
+/* 수정구슬 부드러운 확대 축소 애니메이션 */
+@keyframes orbPulseScale {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 15px #c880ff,
+      0 0 30px #b04bff,
+      0 0 40px #a020f0;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow:
+      0 0 25px #e0aaff,
+      0 0 40px #d460ff,
+      0 0 60px #cc33ff;
+  }
+}
+
+/* 수정구슬과 함께 위아래 부드럽게 움직이는 애니메이션 */
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* 수정구슬 위에 따라다니는 글씨 이미지 */
+.orb-label-image {
+  width: 160px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 4px #ffd6ff) drop-shadow(0 0 10px #ffccff);
+}
+
+/* 별 래퍼 */
+.star-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 15px #f9bbff);
 }
 
 /* 별 컨테이너 */
@@ -69,26 +161,7 @@ body,
   width: 500px;
   height: auto;
   z-index: 10;
-  animation: pulseStar 3s infinite ease-in-out;
-}
-
-/* 별 반짝임 */
-@keyframes pulseStar {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 10px #fff4f4);
-  }
-  50% {
-    transform: scale(1.03);
-    filter: drop-shadow(0 0 30px #ffe6fa);
-  }
-}
-
-/* 별 래퍼 */
-.star-wrapper {
-  position: relative;
-  width: 100%;
-  height: auto;
+  animation: starFloat 6s ease-in-out infinite;
 }
 
 /* 별 이미지 */
@@ -96,12 +169,56 @@ body,
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
-  transition: transform 0.3s ease;
+  filter:
+    drop-shadow(0 0 15px #ffccff)
+    drop-shadow(0 0 30px #ff99ff);
+  animation: starSparkle 3s ease-in-out infinite alternate;
+  transition: filter 0.3s ease;
+  cursor: pointer;
+  border-radius: 12px;
 }
 
-.star-image:hover {
-  transform: scale(1.05);
+/* 별 반짝임 애니메이션 */
+@keyframes starSparkle {
+  0% {
+    filter:
+      drop-shadow(0 0 15px #ffccff)
+      drop-shadow(0 0 30px #ff99ff);
+  }
+  100% {
+    filter:
+      drop-shadow(0 0 30px #ffddff)
+      drop-shadow(0 0 50px #ffbbff);
+  }
+}
+
+/* 별 부드러운 떠오름 효과 */
+@keyframes starFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(3deg);
+  }
+}
+
+/* 별 빛나는 꼬리 */
+.star-image.with-trail {
+  animation: sparkleTrail 2s forwards, starSparkle 3s ease-in-out infinite alternate;
+}
+
+/* 빛나는 꼬리 애니메이션 */
+@keyframes sparkleTrail {
+  0% {
+    filter:
+      drop-shadow(0 0 10px #ffffff)
+      drop-shadow(0 0 20px #ffd6ff);
+  }
+  100% {
+    filter:
+      drop-shadow(0 0 40px #fff0f5)
+      drop-shadow(0 0 70px #ffe4ff);
+  }
 }
 
 /* 입력칸 위치 */
@@ -111,98 +228,88 @@ body,
   left: 50%;
   width: 70%;
   transform: translate(-50%, -50%);
+  z-index: 25;
+  box-shadow:
+    0 0 10px #d08aff,
+    0 0 20px #a76aff,
+    0 0 30px #9f58ff;
+  border-radius: 20px;
+  padding: 20px 30px;
+  background: rgba(50, 10, 80, 0.3);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 150, 255, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.star-form:focus-within {
+  box-shadow:
+    0 0 15px #ffb3ff,
+    0 0 30px #d27aff,
+    0 0 50px #c060ff;
 }
 
 /* 입력 필드 (input + textarea 공통) */
 .star-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
-  padding: 10px;
+  background: transparent;
+  border: none;
   text-align: center;
   font-size: 20px;
-  color: #1e1e1e; /* ✨ 진한 회색으로 글씨 가독성 향상 */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(5px);
+  color: #f1eaff;
   resize: none;
+  caret-color: #ff99ff;
+  text-shadow:
+    0 0 3px #ffccff,
+    0 0 5px #ff99ff;
+  transition: color 0.3s ease;
 }
 
 .star-input::placeholder {
-  color: #e0e0ff;
+  color: #d8b3ff;
+  opacity: 0.7;
+  font-style: italic;
 }
 
 .star-input:focus {
   outline: none;
-  box-shadow: 0 0 12px #d8b4fe;
-  border-color: #e9d5ff;
+  color: #ffffff;
+  text-shadow:
+    0 0 5px #ffaaff,
+    0 0 10px #ff88ff;
 }
 
 /* 버튼 */
 .star-submit-button {
   position: absolute;
-  bottom: -50px;
+  bottom: -50px; /* 별 아래에 위치 */
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #fdfbff, #e9d5ff);
+  background: linear-gradient(135deg, #cc99ff, #ffccff);
   border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-size: 16px;
-  color: #333;
+  padding: 10px 22px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #4b006f;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 0 10px #ffb3ff,
+    0 0 20px #d27aff;
   transition: all 0.3s ease;
 }
 
 .star-submit-button:hover {
-  background: linear-gradient(135deg, #fbeaff, #d8b4fe);
+  background: linear-gradient(135deg, #ffccff, #cc99ff);
+  box-shadow:
+    0 0 20px #ffb3ff,
+    0 0 40px #d27aff,
+    0 0 60px #c060ff;
   transform: translateX(-50%) scale(1.05);
-  box-shadow: 0 0 15px #f3d9ff;
 }
 
 /* 비행 애니메이션 */
 .star-container.fly {
   transform: translate(500px, -100px) scale(0.2);
   opacity: 0;
-}
-
-.star-image.with-trail {
-  animation: sparkleTrail 2s forwards;
-}
-
-@keyframes sparkleTrail {
-  0% {
-    filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #ffd6ff);
-  }
-  100% {
-    filter: drop-shadow(0 0 30px #fff0f5) drop-shadow(0 0 60px #ffe4ff);
-  }
-}
-
-/* 수정구슬 (Magic Orb) */
-.crystal-canvas {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, #fdf4ff 20%, #c084fc 70%, transparent 100%);
-  position: absolute;
-  top: 60%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  z-index: 15;
-  pointer-events: none;
-  animation: orbGlow 3s infinite alternate ease-in-out;
-}
-
-/* 수정구슬 빛무리 */
-@keyframes orbGlow {
-  0% {
-    box-shadow: 0 0 10px #f0d9ff, 0 0 20px #c084fc;
-    opacity: 0.8;
-  }
-  100% {
-    box-shadow: 0 0 25px #e9d5ff, 0 0 40px #a855f7;
-    opacity: 1;
-  }
+  transition: transform 2s ease, opacity 2s ease;
 }

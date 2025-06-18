@@ -1,15 +1,18 @@
-import labelImage from './img/name.png'; // ← 글씨 이미지 파일 경로 맞춰서
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { selectRandomAI } from './utils/selectRandomAI';
 import { voiceMap } from './data/voiceMap';
 
+import SilhouetteScreen from './components/SilhouetteScreen';
 import CrystalBallScene from './components/CrystalBallScene';
 import NameInput from './components/NameInput';
 import ConcernInput from './components/ConcernInput';
 import Output from './components/Output';
 
 import titleImg from './img/title.png';
+import labelName from './img/name.png'; // 이름을 알려주세요
+import labelMajor from './img/major.png'; // 소속을 알려주세요
+import labelWorry from './img/worry.png'; // 고민을 적어주세요
 
 import './App.css';
 
@@ -23,7 +26,6 @@ function App() {
   const [answer, setAnswer] = useState('');
   const [selectedAI, setSelectedAI] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
-
 
   const handleStartClick = () => {
     setStep('major');
@@ -66,7 +68,7 @@ function App() {
   const handleConcernSubmit = async (enteredConcern) => {
     setConcern(enteredConcern);
     setCurrentMessage('');
-    setStep('result');
+    setStep('loading');
     setIsAnimating(true);
 
     const selected = selectRandomAI();
@@ -74,7 +76,7 @@ function App() {
 
     try {
       const response = await axios.post('http://localhost:5000/make-prompt', {
-        name: name,
+        name,
         worry: enteredConcern,
         department:
           major === '소프트웨어과' ? 'S' : major === '디자인과' ? 'D' : 'O',
@@ -92,9 +94,14 @@ function App() {
         ...prev,
         voice: voiceUrl,
       }));
+
+      setTimeout(() => {
+        setStep('result');
+      }, 1500);
     } catch (error) {
       console.error('AI 응답 에러:', error);
       setAnswer('AI 선생님의 조언을 가져오는 데 실패했어요.');
+      setStep('result');
     }
   };
 
@@ -113,16 +120,21 @@ function App() {
   const showCrystalBall =
     step === 'major' || step === 'nameInput' || step === 'concernInput';
 
+  const getLabelImage = () => {
+    switch (step) {
+      case 'major':
+        return labelMajor;
+      case 'nameInput':
+        return labelName;
+      case 'concernInput':
+        return labelWorry;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div
-      className="app-background"
-      style={{
-        height: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Floating Crystal Ball (왼쪽 상단으로 이동) */}
+    <div className="app-background" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {showCrystalBall && (
         <div
           style={{
@@ -137,26 +149,27 @@ function App() {
             filter: 'drop-shadow(0 20px 40px rgba(255, 255, 255, 0.1))',
           }}
         >
-          
           <CrystalBallScene />
-          {/* ✅ 수정구슬 위에 이미지 */}
-          <img
-            src={labelImage}
-            alt="구슬 위 글자"
-            style={{
-              position: 'absolute',
-              top: '80px',
-              left: '60%',
-              transform: 'translateX(-50%)',
-              width: '280px',
-              height: 'auto',
-              zIndex: 999,
-              pointerEvents: 'none',
-            }}
-          />
 
+          {/* 💬 구슬 위에 단계별 이미지 */}
+          {getLabelImage() && (
+            <img
+              src={getLabelImage()}
+              alt="구슬 글자"
+              style={{
+                position: 'absolute',
+                top: '50px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '280px',
+                height: 'auto',
+                zIndex: 999,
+                pointerEvents: 'none',
+              }}
+            />
+          )}
 
-          {/* Mystic Glow Effect */}
+          {/* Mystic Glow */}
           <div
             style={{
               position: 'absolute',
@@ -166,8 +179,7 @@ function App() {
               height: '400px',
               transform: 'translate(-50%, -50%)',
               borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(147, 197, 253, 0.1) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(147, 197, 253, 0.1) 0%, transparent 70%)',
               animation: 'pulse 3s infinite alternate',
               pointerEvents: 'none',
             }}
@@ -175,8 +187,7 @@ function App() {
         </div>
       )}
 
-
-      {/* Animated Background Particles */}
+      {/* 💫 배경 이펙트 */}
       <div
         style={{
           position: 'absolute',
@@ -205,8 +216,8 @@ function App() {
             transition: 'transform 0.3s ease',
           }}
           onClick={handleStartClick}
-          onMouseEnter={(e) => (e.target.style.transform = 'scale(1.02)')}
-          onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
         >
           <img
             src={titleImg}
@@ -218,6 +229,8 @@ function App() {
             }}
           />
         </div>
+      ) : step === 'loading' ? (
+        <SilhouetteScreen />
       ) : step === 'result' ? (
         <Output text={answer} ai={selectedAI} onDone={handleRestart} />
       ) : (
@@ -231,8 +244,6 @@ function App() {
             paddingBottom: '7%',
           }}
         >
-          {/* Main Input Container (왼쪽 하단) */}
-          
           <div
             style={{
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -262,7 +273,6 @@ function App() {
                 >
                   소속을 선택해주세요
                 </h2>
-
                 <div style={{ marginBottom: '30px' }}>
                   {['소프트웨어과', '디자인과', '외부인'].map((option) => (
                     <label
@@ -285,16 +295,6 @@ function App() {
                         transition: 'all 0.3s ease',
                         backdropFilter: 'blur(10px)',
                       }}
-                      onMouseEnter={(e) => {
-                        if (major !== option) {
-                          e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (major !== option) {
-                          e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-                        }
-                      }}
                     >
                       <input
                         type="radio"
@@ -311,7 +311,6 @@ function App() {
                     </label>
                   ))}
                 </div>
-
                 <button
                   onClick={handleMajorSubmit}
                   disabled={!major}
@@ -333,46 +332,15 @@ function App() {
                       ? '0 10px 25px rgba(147, 197, 253, 0.3)'
                       : 'none',
                   }}
-                  onMouseEnter={(e) => {
-                    if (major) {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow =
-                        '0 15px 35px rgba(147, 197, 253, 0.4)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (major) {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow =
-                        '0 10px 25px rgba(147, 197, 253, 0.3)';
-                    }
-                  }}
                 >
                   {major ? '선택 완료' : '소속을 선택해주세요'}
                 </button>
               </div>
             )}
 
-            {step === 'nameInput' && (
-              <div
-                style={{
-                  transform: isAnimating ? 'scale(0.95) opacity(0)' : 'scale(1) opacity(1)',
-                  transition: 'all 0.5s ease',
-                }}
-              >
-                <NameInput onSubmit={handleNameSubmit} />
-              </div>
-            )}
-
+            {step === 'nameInput' && <NameInput onSubmit={handleNameSubmit} />}
             {step === 'concernInput' && showConcernInput && (
-              <div
-                style={{
-                  transform: isAnimating ? 'scale(0.95) opacity(0)' : 'scale(1) opacity(1)',
-                  transition: 'all 0.5s ease',
-                }}
-              >
-                <ConcernInput onSubmit={handleConcernSubmit} />
-              </div>
+              <ConcernInput onSubmit={handleConcernSubmit} />
             )}
           </div>
         </div>
@@ -389,8 +357,6 @@ function App() {
             transform: translate(-50%, -50%) scale(1.1);
           }
         }
-
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
       `}</style>
     </div>
   );
