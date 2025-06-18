@@ -1,0 +1,32 @@
+# Android Emulator/AVD 관련
+*.ini
+*.img
+*.qcow2
+*.ram
+*.lock
+*.avd
+*.config
+*.pub
+adbkey
+adbkey.pub
+
+# 개인 설정/로그
+.bash_history
+.emulator_console_auth_token
+*.log
+
+# Office 문서
+*.docx
+*.xlsx
+*.pptx
+*.pdf
+
+# Git 무시할 폴더
+.vscode/
+.idea/
+.cache/
+build/
+dist/
+
+# 기타
+$$tezsb.*

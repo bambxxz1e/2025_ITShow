@@ -1,0 +1,208 @@
+/* 기본 설정 */
+body,
+#root {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 전체 배경 */
+.app-container,
+.app-background {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('./img/backgroundimg.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 50px;
+  box-sizing: border-box;
+  position: relative; 
+  overflow: hidden;
+  animation: bgGlow 10s ease-in-out infinite alternate;
+}
+
+/* 배경 전체에 빛나는 애니메이션 */
+@keyframes bgGlow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+  }
+  100% {
+    filter: brightness(1.1) drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
+  }
+}
+
+/* 수정구슬 멘트 오버레이 */
+.magic-orb-overlay-message {
+  position: absolute;
+  top: 60%;  
+  left: 60%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+  font-size: 18px;
+  color: #f5f5ff;
+  text-shadow: 0 0 8px #c4b5fd, 0 0 16px #a78bfa;
+  animation: fadeInUp 1.5s ease-in-out;
+}
+
+/* 멘트 천천히 나타나는 효과 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* 별 컨테이너 */
+.star-container {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 500px;
+  height: auto;
+  z-index: 10;
+  animation: pulseStar 3s infinite ease-in-out;
+}
+
+/* 별 반짝임 */
+@keyframes pulseStar {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px #fff4f4);
+  }
+  50% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 30px #ffe6fa);
+  }
+}
+
+/* 별 래퍼 */
+.star-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+/* 별 이미지 */
+.star-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
+  transition: transform 0.3s ease;
+}
+
+.star-image:hover {
+  transform: scale(1.05);
+}
+
+/* 입력칸 위치 */
+.star-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  transform: translate(-50%, -50%);
+}
+
+/* 입력 필드 (input + textarea 공통) */
+.star-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #1e1e1e; /* ✨ 진한 회색으로 글씨 가독성 향상 */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  resize: none;
+}
+
+.star-input::placeholder {
+  color: #e0e0ff;
+}
+
+.star-input:focus {
+  outline: none;
+  box-shadow: 0 0 12px #d8b4fe;
+  border-color: #e9d5ff;
+}
+
+/* 버튼 */
+.star-submit-button {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fdfbff, #e9d5ff);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.star-submit-button:hover {
+  background: linear-gradient(135deg, #fbeaff, #d8b4fe);
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 0 15px #f3d9ff;
+}
+
+/* 비행 애니메이션 */
+.star-container.fly {
+  transform: translate(500px, -100px) scale(0.2);
+  opacity: 0;
+}
+
+.star-image.with-trail {
+  animation: sparkleTrail 2s forwards;
+}
+
+@keyframes sparkleTrail {
+  0% {
+    filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #ffd6ff);
+  }
+  100% {
+    filter: drop-shadow(0 0 30px #fff0f5) drop-shadow(0 0 60px #ffe4ff);
+  }
+}
+
+/* 수정구슬 (Magic Orb) */
+.crystal-canvas {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #fdf4ff 20%, #c084fc 70%, transparent 100%);
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  pointer-events: none;
+  animation: orbGlow 3s infinite alternate ease-in-out;
+}
+
+/* 수정구슬 빛무리 */
+@keyframes orbGlow {
+  0% {
+    box-shadow: 0 0 10px #f0d9ff, 0 0 20px #c084fc;
+    opacity: 0.8;
+  }
+  100% {
+    box-shadow: 0 0 25px #e9d5ff, 0 0 40px #a855f7;
+    opacity: 1;
+  }
+}
