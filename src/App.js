@@ -1,4 +1,4 @@
-import labelImage from "./img/name.png"; // ← 글씨 이미지 파일 경로 맞춰서
+import labelImage from "./img/name.png";
 import axios from "axios";
 import React, { useState } from "react";
 import { selectRandomAI } from "./utils/selectRandomAI";
@@ -24,7 +24,7 @@ function App() {
   const [selectedAI, setSelectedAI] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // 소속 입력 구분 
+  // 소속 구분 변환
   const convertMajorToDepartment = (major) => {
     if (major === "소프트웨어과") return "S";
     if (major === "디자인과") return "D";
@@ -75,8 +75,9 @@ function App() {
     setStep("result");
     setIsAnimating(true);
 
-    const selected = selectRandomAI();
-    setSelectedAI(selected);
+    // 이 부분을 제거하거나 수정해야 함
+    // const selected = selectRandomAI();
+    // setSelectedAI(selected);
 
     try {
       const response = await axios.post("http://localhost:5000/make-prompt", {
@@ -89,25 +90,27 @@ function App() {
       const { voice, text, audio } = response.data;
       setAnswer(text);
 
-      // base64 audio를 blob URL로 변환
+      // base64 오디오 -> blob URL 변환
       const blob = new Blob(
         [Uint8Array.from(atob(audio), (c) => c.charCodeAt(0))],
-        {
-          type: "audio/mpeg",
-        }
+        { type: "audio/mpeg" }
       );
       const voiceUrl = URL.createObjectURL(blob);
 
-      setSelectedAI((prev) => ({
-        ...prev,
+      // 백엔드에서 받은 voice 이름을 사용
+      setSelectedAI({
+        name: voice, // 백엔드에서 받은 선생님 이름
         voice: voiceUrl,
-      }));
+      });
     } catch (error) {
       console.error("AI 응답 에러:", error);
       setAnswer("AI 선생님의 조언을 가져오는 데 실패했어요.");
+      setSelectedAI({
+        name: "알 수 없음",
+        voice: null,
+      });
     }
   };
-
   const handleRestart = () => {
     setStep("start");
     setMajor("");
@@ -132,7 +135,6 @@ function App() {
         overflow: "hidden",
       }}
     >
-      {/* Floating Crystal Ball (왼쪽 상단으로 이동) */}
       {showCrystalBall && (
         <div
           style={{
@@ -148,7 +150,6 @@ function App() {
           }}
         >
           <CrystalBallScene />
-          {/* 수정구슬 위 글자 이미지 */}
           <img
             src={labelImage}
             alt="구슬 위 글자"
@@ -164,7 +165,6 @@ function App() {
             }}
           />
 
-          {/* Mystic Glow Effect */}
           <div
             style={{
               position: "absolute",
@@ -183,7 +183,6 @@ function App() {
         </div>
       )}
 
-      {/* Animated Background Particles */}
       <div
         style={{
           position: "absolute",
@@ -226,7 +225,20 @@ function App() {
           />
         </div>
       ) : step === "result" ? (
-        <Output text={answer} ai={selectedAI} onDone={handleRestart} />
+        selectedAI ? (
+          <Output text={answer} ai={selectedAI} onDone={handleRestart} />
+        ) : (
+          <div
+            style={{
+              color: "white",
+              padding: "20px",
+              textAlign: "center",
+              fontSize: "18px",
+            }}
+          >
+            AI 데이터를 불러오는 중입니다...
+          </div>
+        )
       ) : (
         <div
           style={{
@@ -238,7 +250,6 @@ function App() {
             paddingBottom: "7%",
           }}
         >
-          {/* Main Input Container (오른쪽 하단) */}
           <div
             style={{
               backgroundColor: "rgba(255, 255, 255, 0.08)",
