@@ -21,7 +21,7 @@ const SilhouetteScreen = () => {
           maxHeight: '100%',
           objectFit: 'contain',
           filter: 'drop-shadow(0 0 40px #a78bfa)',
-          animation: 'floatIn 3s ease-in-out',
+          animation: 'floatIn 1s ease-in-out',
         }}
       />
       <p style={{

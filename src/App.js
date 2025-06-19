@@ -97,7 +97,7 @@ function App() {
 
       setTimeout(() => {
         setStep('result');
-      }, 1500);
+      }, 4000);
     } catch (error) {
       console.error('AI 응답 에러:', error);
       setAnswer('AI 선생님의 조언을 가져오는 데 실패했어요.');
