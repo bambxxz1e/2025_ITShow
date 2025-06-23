@@ -30,3 +30,4 @@ dist/
 
 # 기타
 $$tezsb.*
+node_modules/
