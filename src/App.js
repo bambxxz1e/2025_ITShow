@@ -158,8 +158,8 @@ function App() {
               alt="구슬 글자"
               style={{
                 position: 'absolute',
-                top: '50px',
-                left: '50%',
+                top: '80px',
+                left: '47%',
                 transform: 'translateX(-50%)',
                 width: '280px',
                 height: 'auto',
@@ -246,15 +246,9 @@ function App() {
         >
           <div
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(20px)',
               borderRadius: '24px',
               padding: '40px 50px',
               minWidth: '400px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.2)',
-              transform: isAnimating ? 'translateY(-10px)' : 'translateY(0)',
-              transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
           >
             {step === 'major' && (
@@ -274,7 +268,7 @@ function App() {
                   소속을 선택해주세요
                 </h2>
                 <div style={{ marginBottom: '30px' }}>
-                  {['소프트웨어과', '디자인과', '외부인'].map((option) => (
+                  {['소프트웨어과', '디자인과', '방문자'].map((option) => (
                     <label
                       key={option}
                       style={{
@@ -319,6 +313,7 @@ function App() {
                     padding: '16px 24px',
                     borderRadius: '16px',
                     border: 'none',
+                    fontFamily: 'BookkMyungjo-Bd',
                     background: major
                       ? 'linear-gradient(135deg, #93c5fd, #a78bfa)'
                       : 'rgba(255, 255, 255, 0.1)',

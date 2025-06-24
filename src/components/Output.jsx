@@ -28,14 +28,22 @@ const Output = ({ text, ai, onDone }) => {
       {/* 오른쪽 상단 텍스트 출력 */}
       <div style={{
         position: 'absolute',
-        top: '70px',
-        right: '40px',
+        top: '180px',
+        right: '80px',
         color: '#fff',
         fontSize: '20px',
         fontWeight: 'bold',
-        maxWidth: 'calc(100vw - 400px)',
+        maxWidth: '700px',
         textAlign: 'right',
         lineHeight: '1.6',
+        wordBreak: 'break-word',
+        boxShadow: '0 0 10px #d08aff, 0 0 20px #a76aff, 0 0 30px #9f58ff',
+        borderRadius: '20px',
+        padding: '20px 30px',
+        background: 'rgba(50, 10, 80, 0.3)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(200, 150, 255, 0.3)',
+        transition: 'box-shadow 0.3s ease',
       }}>
         {text}
       </div>
